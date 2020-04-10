@@ -18,7 +18,6 @@ public class Player extends GameObject {
 
     public void tick() {
 
-        x = Game.mur2(x, 0, Game.WIDTH - 45);
         y = Game.mur2(y, 0, Game.HEIGHT - 75);
 
         x += velX;

@@ -28,8 +28,6 @@ public class Rock extends GameObject {
 
     public void tick() {
 
-        x = Game.mur(x, 0, Game.WIDTH - 45);
-        y = Game.mur(y, 0, Game.HEIGHT - 75);
 
         x += velX;
         y += velY;

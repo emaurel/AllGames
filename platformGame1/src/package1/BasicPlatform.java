@@ -11,7 +11,7 @@ public class BasicPlatform extends GameObject {
         super(x, y, id);
         this.handler = handler;
         height = 50;
-        width = Game.WIDTH;
+        width = Game.WIDTH + 4000;
         gravityOn = false;
     }
 

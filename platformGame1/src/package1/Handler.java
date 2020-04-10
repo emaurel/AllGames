@@ -22,7 +22,9 @@ public class Handler {
         for (int i = 0; i < object.size(); i++) {
             GameObject tempObject = object.get(i);
             tempObject.tick();
+
         }
+        center();
         gravity();
 
     }
@@ -30,14 +32,14 @@ public class Handler {
     public void render(Graphics g) {
         for (int i = 0; i < object.size(); i++) {
             GameObject tempObject = object.get(i);
-            tempObject.render(g);
-            g.setColor(Color.red);
-            g.drawRect(tempObject.getX(), tempObject.getY() + tempObject.getHeight() / 2, tempObject.getWidth(),
-                    tempObject.getHeight() / 2);
-            g.setColor(Color.green);
-            g.drawRect(tempObject.getX(), tempObject.getY(), tempObject.getWidth(),
-            tempObject.getHeight() / 2);
 
+            tempObject.render(g);
+            /*
+             * g.setColor(Color.red); g.drawRect(tempObject.getX(), tempObject.getY() +
+             * tempObject.getHeight() / 2, tempObject.getWidth(), tempObject.getHeight() /
+             * 2); g.setColor(Color.green); g.drawRect(tempObject.getX(), tempObject.getY(),
+             * tempObject.getWidth(), tempObject.getHeight() / 2);
+             */
         }
     }
 
@@ -49,11 +51,13 @@ public class Handler {
                 GameObject tempObject = object.get(i);
                 GameObject tempObject2 = object.get(j);
 
-                Rectangle downHitbox = tempObject.copyHitBox(tempObject.getX(), tempObject.getY() + tempObject.getHeight() / 2, tempObject.getWidth(),
-                tempObject.getHeight() / 2);
+                Rectangle downHitbox = tempObject.copyHitBox(tempObject.getX(),
+                        tempObject.getY() + tempObject.getHeight() / 2, tempObject.getWidth(),
+                        tempObject.getHeight() / 2);
 
-                Rectangle downHitbox2 = tempObject2.copyHitBox(tempObject2.getX(), tempObject2.getY() + tempObject2.getHeight() / 2, tempObject2.getWidth(),
-                tempObject2.getHeight() / 2);
+                Rectangle downHitbox2 = tempObject2.copyHitBox(tempObject2.getX(),
+                        tempObject2.getY() + tempObject2.getHeight() / 2, tempObject2.getWidth(),
+                        tempObject2.getHeight() / 2);
 
                 Rectangle upHitbox = tempObject.copyHitBox(tempObject.getX(), tempObject.getY(), tempObject.getWidth(),
                         tempObject.getHeight() / 2);
@@ -70,7 +74,6 @@ public class Handler {
                         }
 
                     } else if (upHitbox.intersects(downHitbox2) || upHitbox.intersects(upHitbox2)) {
-                        System.out.println(tempObject.getID() + "  " + tempObject2.getID());
 
                         if (tempObject.getX() > tempObject2.getX()) {
                             tempObject.setX(tempObject2.getX() + tempObject2.getWidth());
@@ -94,6 +97,21 @@ public class Handler {
 
     }
 
+    public void center() {
+        for (int i = 0; i < object.size(); i++) {
+            GameObject tempObject = object.get(i);
+            for (int j = 0; j < object.size(); j++) {
+                GameObject tempObject2 = object.get(j);
+                if (tempObject2.gravityOn && tempObject2.getID() != ID.Player && tempObject != tempObject2) {
+                    if (tempObject.getID() == ID.Camera) {
+                        tempObject2.setVelX(tempObject.getVelX());
+                    }
+
+                }
+            }
+        }
+    }
+
     public void addObject(GameObject object) {
         this.object.add(object);
     }
@@ -103,13 +121,18 @@ public class Handler {
     }
 
     public void startGame() {
-        addObject(new Player(100, 0, ID.Player, this));
-        addObject(new Rock(830, 0, ID.Rock, this, 100, 20));
-        for(int i = 0; i < 17; i++){
-            addObject(new Rock(750 - 40*i, 0 + 20 *i, ID.Rock, this, 20, 128));
+        addObject(new Player(0, 0, ID.Player, this));
+        for (int i = 0; i < object.size(); i++) {
+            GameObject tempObject = object.get(i);
+            if (tempObject.getID() == ID.Player) {
+                addObject(new Camera(0, 0, ID.Camera, this, tempObject));
+            }
         }
+        addObject(new Rock(200, 0, ID.Rock, this, 100, 20));
+        addObject(new Rock(100, 0, ID.Rock, this, 100, 20));
+        addObject(new Rock(740, 0, ID.Rock, this, 100, 20));
 
-        addObject(new BasicPlatform(0, Game.HEIGHT - 200, ID.BasicPlatform, this));
+        addObject(new BasicPlatform(-2000, Game.HEIGHT - 200, ID.BasicPlatform, this));
     }
 
 }
